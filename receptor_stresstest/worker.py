@@ -36,8 +36,8 @@ class Blunderbuss:
             dict(
                 ts=datetime.datetime.utcnow().isoformat(),
                 blob=base64.encodebytes(
-                    open('/dev/urandom', 'rb').read(self.size // 4 * 3)
-                )
+                    open("/dev/urandom", "rb").read(self.size // 4 * 3)
+                ).decode("utf8"),
             )
         )
 
