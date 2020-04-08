@@ -23,10 +23,11 @@ class Blunderbuss:
         self.size = size
 
     async def run(self):
+        loop = asyncio.get_event_loop()
         seconds_left = self.length
         while seconds_left:
             for _ in range(self.rate):
-                asyncio.create_task(self.emit())
+                loop.create_task(self.emit())
             await asyncio.sleep(1)
             seconds_left -= 1
         await asyncio.sleep(1)
@@ -45,7 +46,9 @@ class Blunderbuss:
 def blunderbuss(message, config, queue):
     args = json.loads(message.raw_payload)
     response_generator = Blunderbuss(queue, **args)
-    asyncio.run(response_generator.run())
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(response_generator.run())
 
 
 blunderbuss.receptor_export = True
